@@ -1,0 +1,89 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/jensonhirst/Orion/main/source"))()
+local api = loadstring(game:HttpGet("https://sdkapi-public.luarmor.net/library.lua"))()
+
+api.script_id = "cd22bffdfefc799f64ff2a0332d5adeb"
+
+if isfile("Trax_Keys/Trax_Spawner") then
+    script_key = readfile("Trax_Keys/Trax_Spawner")
+    if script_key and api.check_key(script_key).code == "KEY_VALID" then
+OrionLib:MakeNotification({Name="Success", Content="Loaded with saved key", Time=5})
+        api.load_script()
+        return
+    end
+end
+
+local Window = OrionLib:MakeWindow({
+    Name = "Injection Spawner | Key System",
+    HidePremium = false,
+    SaveConfig = false,
+    IntroEnabled = true,
+    IntroText = "Injection Spawner"
+})
+
+local tab1 = Window:MakeTab({
+    Name = "Get Key",
+    Icon = "rbxassetid://104229924295526",
+    PremiumOnly = false
+})
+
+local tab2 = Window:MakeTab({
+    Name = "Redeem",
+    Icon = "rbxassetid://99181785766598",
+    PremiumOnly = false
+})
+
+tab1:AddSection({Name = "Get Key"})
+tab2:AddSection({Name = "Enter Key"})
+
+local Label = tab1:AddParagraph("Get Key","Get a key from our discord below.\ndiscord.gg/scriptroblox")
+
+local Button1 = tab1:AddButton({
+    Name = "Copy Key Link",
+    Callback = function()
+        if setclipboard then setclipboard("https://discord.gg/scriptroblox") end
+        OrionLib:MakeNotification({Name="Copied", Content="Invite link copied to clipboard", Time=4})
+    end
+})
+
+local key = ""
+local Input = tab2:AddTextbox({
+    Name = "Key",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Text)
+        key = tostring(Text or ""):gsub("%s+","")
+    end
+})
+
+local Button2 = tab2:AddButton({
+    Name = "Activate",
+    Callback = function()
+        if #key ~= 32 then
+            OrionLib:MakeNotification({Name="Error", Content="Invalid key", Time=3})
+            return
+        end
+
+        script_key = key
+
+     local status = api.check_key(script_key)
+
+        if status.code == "KEY_VALID" then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+           Title = "Success",
+           Text = "Key valid",
+           Duration = 5
+        })
+         OrionLib:Destroy()
+            writefile("Trax_Keys/Trax_Spawner", script_key)
+            api.load_script()
+        elseif status.code == "KEY_INCORRECT" then
+                OrionLib:MakeNotification({Name="Error", Content="Incorrect key/expired key", Time=5})
+        elseif status.code == "KEY_HWID_LOCKED" then
+            OrionLib:MakeNotification({Name="HWID Locked", Content="Reset HWID in the luarmor panel", Time=5})
+        else
+            OrionLib:MakeNotification({Name="error", Content=tostring(status.code or "Try again later"), Time=5})
+        end
+    end
+})
+
+OrionLib:Init()</pre>
