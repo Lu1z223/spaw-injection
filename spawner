@@ -17,7 +17,7 @@ local Window = OrionLib:MakeWindow({
     HidePremium = false,
     SaveConfig = false,
     IntroEnabled = true,
-    IntroText = "Injection Spawner"
+    IntroText = "Trax Spawner"
 })
 
 local tab1 = Window:MakeTab({
@@ -86,4 +86,4 @@ local Button2 = tab2:AddButton({
     end
 })
 
-OrionLib:Init()</pre>
+OrionLib:Init()
